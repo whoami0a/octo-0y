@@ -1,19 +1,28 @@
 name: Main
 jobs:
-send-message:
-  runs-on: ubuntu-latest
-  steps:
-  - uses: actions/checkout@v3
+  send-message:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
 
-    # Define secret variables for bot_token and chat_id
-  - name: Set secret variables
-    run: |
-      echo "::add-mask::${{ secrets.BOT_TOKEN }}"
-      echo "::add-mask::${{ secrets.CHAT_ID }}"
-  
-    # Use curl to send the message
-  - name: Send message to Telegram group
-    run: |
-      curl -X POST https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}/sendMessage \
-        -d chat_id=${{ secrets.CHAT_ID }} \
-        -d text="Haha"
+      # Define secret variables for bot_token and chat_id
+    - name: Set secret variables
+      run: |
+        echo "::add-mask::${{ secrets.BOT_TOKEN }}"
+        echo "::add-mask::${{ secrets.CHAT_ID }}"
+
+      # Print secret variable values for debugging (remove in production)
+      - name: Print debug info (remove before production)
+        if: ${{ always() }}  # Run this step always, even on errors
+        run: |
+          echo "BOT_TOKEN (masked): ${{ secrets.BOT_TOKEN }}"
+          echo "CHAT_ID (masked): ${{ secrets.CHAT_ID }}"
+
+      # Use curl with verbose logging for debugging
+    - name: Send message to Telegram group with verbose logging (for debugging)
+      run: |
+        curl -X POST \
+          -v  # Enable verbose output
+          https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}/sendMessage \
+          -d chat_id=${{ secrets.CHAT_ID }} \
+          -d text="Leo"
