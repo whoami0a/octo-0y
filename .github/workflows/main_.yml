@@ -1,3 +1,4 @@
+name: Main
 jobs:
 send-message:
   runs-on: ubuntu-latest
